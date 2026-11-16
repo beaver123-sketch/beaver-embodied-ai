@@ -7,12 +7,13 @@ import {
   focusIds,
   marketSignals,
   marketSource,
-  methodologyNotes,
   platforms,
   researchInsights,
   robots,
   type CompetitorCategory,
   type CompetitorRecord,
+  type TaskFlow,
+  type VisualFeature,
 } from "@/content/competitor-data";
 
 type ResearchModule = "landscape" | "database" | "cases" | "comparison" | "insights";
@@ -20,9 +21,9 @@ type ResearchModule = "landscape" | "database" | "cases" | "comparison" | "insig
 const modules: { id: ResearchModule; number: string; title: string; hint: string }[] = [
   { id: "landscape", number: "01", title: "行业全景", hint: "行业与发展方向" },
   { id: "database", number: "02", title: "竞品数据库", hint: "产品与企业目录" },
-  { id: "cases", number: "03", title: "重点案例", hint: "重点产品深度入口" },
+  { id: "cases", number: "03", title: "重点案例", hint: "代表产品深度分析" },
   { id: "comparison", number: "04", title: "横向对比", hint: "本体、任务与成熟度" },
-  { id: "insights", number: "05", title: "Beaver 研究机会", hint: "问题与设计启发" },
+  { id: "insights", number: "05", title: "Beaver 研究机会", hint: "产品设计启发" },
 ];
 
 const allRecords = [...robots, ...platforms];
@@ -67,24 +68,12 @@ export function CompetitorExplorer() {
 
   return (
     <div className="competitor-page">
-      <div className="competitor-topline">
-        <span>BEAVER / COMPETITOR RESEARCH</span>
-        <span>COMP-001—006 · UPDATED 2026.11.16</span>
-      </div>
-
       <header className="competitor-heading">
-        <p className="competitor-eyebrow">GLOBAL EMBODIED AI LANDSCAPE</p>
+        <p className="competitor-eyebrow">BEAVER / GLOBAL ROBOTICS LANDSCAPE</p>
         <h1>全球具身智能<br className="competitor-mobile-break" />竞品地图</h1>
         <p className="competitor-intro">
-          从机器人本体到具身智能模型，梳理全球代表性产品、技术路线与应用阶段。
-          <br className="competitor-desktop-break" />
-          Sunday Memo 作为重点研究案例，其他路线共同构成 Beaver 的行业参照。
+          从机器人本体、家庭应用到具身智能模型，理解不同产品如何进入真实世界。
         </p>
-        <div className="competitor-meta">
-          <span>研究范围：机器人产品 + 具身智能模型</span>
-          <span>资料口径：截至 2026.11.16</span>
-          <span>国家：按总部 / 主要运营所在地标注</span>
-        </div>
       </header>
 
       <nav className="research-route" aria-label="竞品研究模块" role="tablist">
@@ -114,18 +103,17 @@ export function CompetitorExplorer() {
                 <h2 id="landscape-title">行业全景</h2>
                 <p className="panel-lead">机器人本体、家庭产品与智能模型，正在沿不同路线并行发展。</p>
               </div>
-              <span className="panel-index">GLOBAL VIEW</span>
             </div>
 
             <div className="landscape-stats">
               <div className="landscape-stat"><strong>{robotCount}</strong><span>代表性机器人产品</span></div>
               <div className="landscape-stat"><strong>{platformCount}</strong><span>具身智能模型 / 平台</span></div>
-              <div className="landscape-stat"><strong>{countries}+</strong><span>国家 / 地区标注</span></div>
-              <div className="landscape-stat"><strong>5</strong><span>研究类别</span></div>
+              <div className="landscape-stat"><strong>{countries}+</strong><span>国家 / 地区</span></div>
+              <div className="landscape-stat"><strong>5</strong><span>产品与技术路线</span></div>
             </div>
 
             <div className="landscape-section-title">
-              <h3>行业信号</h3>
+              <h3>行业发展信号</h3>
               <a href={marketSource.url} target="_blank" rel="noreferrer">{marketSource.label} ↗</a>
             </div>
             <div className="market-signal-grid">
@@ -139,8 +127,8 @@ export function CompetitorExplorer() {
             </div>
 
             <div className="landscape-section-title">
-              <h3>五条研究路线</h3>
-              <span>点击下方路线进入对应产品目录</span>
+              <h3>五条产品与技术路线</h3>
+              <span>选择路线，查看代表产品</span>
             </div>
             <div className="route-category-list">
               {(["home", "humanoid", "mobile", "platform", "adjacent"] as CompetitorCategory[]).map((category) => {
@@ -149,15 +137,10 @@ export function CompetitorExplorer() {
                   <button key={category} type="button" className="route-category" onClick={() => { setActiveCategory(category); setActiveModule("database"); }}>
                     <span className="route-category-name">{categoryLabels[category]}</span>
                     <strong>{count.toString().padStart(2, "0")}</strong>
-                    <span className="route-category-arrow">查看目录 →</span>
+                    <span className="route-category-arrow">浏览产品 →</span>
                   </button>
                 );
               })}
-            </div>
-
-            <div className="method-note">
-              <strong>资料口径</strong>
-              <ul>{methodologyNotes.map((note) => <li key={note}>{note}</li>)}</ul>
             </div>
           </section>
         ) : null}
@@ -168,9 +151,9 @@ export function CompetitorExplorer() {
               <div>
                 <p className="panel-kicker">02 / COMPETITOR DATABASE</p>
                 <h2 id="database-title">竞品数据库</h2>
-                <p className="panel-lead">按产品路线筛选。点击产品名称，打开独立分析弹窗与真实资料链接。</p>
+                <p className="panel-lead">按产品路线浏览，选择产品查看结构化分析。</p>
               </div>
-              <span className="panel-index">{filteredRecords.length} RECORDS</span>
+              <span className="panel-index">{filteredRecords.length} 款产品</span>
             </div>
             <div className="database-controls">
               <div className="category-filters" aria-label="按类别筛选">
@@ -188,26 +171,29 @@ export function CompetitorExplorer() {
                 <input value={searchTerm} onChange={(event) => setSearchTerm(event.target.value)} placeholder="例如：Sunday、美国、轮式" />
               </label>
             </div>
-            <div className="competitor-list">
+            <div className="competitor-card-grid">
               {filteredRecords.map((record) => (
-                <button type="button" className={"competitor-row" + (record.featured ? " memo-row" : "")} key={record.id} onClick={() => setSelectedRecord(record)}>
-                  <span className="competitor-row-main">
-                    <span className="competitor-row-title">
-                      <strong>{record.name}</strong>
-                      {record.featured ? <em>重点研究</em> : null}
-                      {record.priority === "重点对比" ? <i>重点对比</i> : null}
-                    </span>
-                    <small>{record.company}</small>
-                  </span>
-                  <span className="competitor-row-country">{record.country}</span>
-                  <span className="competitor-row-form">{record.form}</span>
-                  <span className="competitor-row-stage">{record.stage}</span>
-                  <span className="competitor-row-open">查看分析 ↗</span>
+                <button type="button" className="competitor-card" key={record.id} onClick={() => setSelectedRecord(record)}>
+                  <div className="competitor-card-visual">
+                    <ProductVisual record={record} />
+                    <span className="competitor-card-category">{categoryLabels[record.category]}</span>
+                    {record.featured ? <em>重点案例</em> : null}
+                  </div>
+                  <div className="competitor-card-body">
+                    <div className="competitor-card-title">
+                      <div><strong>{record.name}</strong><small>{record.company}</small></div>
+                      <span>{record.country}</span>
+                    </div>
+                    <p>{record.positioning}</p>
+                    <div className="competitor-card-bottom">
+                      <span>{record.form}</span>
+                      <b>查看分析 ↗</b>
+                    </div>
+                  </div>
                 </button>
               ))}
               {filteredRecords.length === 0 ? <p className="empty-state">没有找到匹配的产品，请调整搜索条件。</p> : null}
             </div>
-            <p className="panel-footnote">产品阶段依据公开资料归纳；“未披露 / 待验证”不代表产品没有相关能力。</p>
           </section>
         ) : null}
 
@@ -217,48 +203,43 @@ export function CompetitorExplorer() {
               <div>
                 <p className="panel-kicker">03 / FOCUS CASES</p>
                 <h2 id="cases-title">重点案例</h2>
-                <p className="panel-lead">以 Sunday Memo 为主案例，其他代表产品用于对照不同路线。</p>
+                <p className="panel-lead">以家庭真实任务为切入点，对照不同本体和智能路线。</p>
               </div>
-              <span className="panel-index">DEEP DIVE</span>
             </div>
 
-            <button type="button" className="memo-feature" onClick={() => setSelectedRecord(getRecord("memo") ?? null)}>
-              <div className="memo-feature-top">
-                <span>PRIMARY CASE / 01</span>
-                <em>重点研究对象</em>
-              </div>
-              <div className="memo-feature-body">
-                <div>
-                  <p className="memo-country">🇺🇸 美国 · Sunday Robotics</p>
-                  <h3>Memo</h3>
-                  <p className="memo-tagline">The helpful home robot.</p>
-                  <p className="memo-description">从家庭重复事务出发，以人的操作数据训练技能，探索可持续扩展的家庭机器人能力。</p>
+            <button type="button" className="memo-feature-v2" onClick={() => setSelectedRecord(getRecord("memo") ?? null)}>
+              <div className="memo-feature-image"><ProductVisual record={getRecord("memo")!} /></div>
+              <div className="memo-feature-copy">
+                <span className="memo-feature-label">PRIMARY CASE · SUNDAY ROBOTICS</span>
+                <p className="memo-country">🇺🇸 美国</p>
+                <h3>Memo</h3>
+                <p className="memo-tagline">The helpful home robot.</p>
+                <p className="memo-description">从餐后清理、咖啡制作和衣物整理出发，以人的操作示范持续扩展家庭技能。</p>
+                <div className="memo-feature-pills">
+                  <span>轮式移动</span><span>升降结构</span><span>双臂操作</span><span>Skill Library</span>
                 </div>
-                <div className="memo-facts">
-                  <span><small>本体形态</small><strong>轮式移动 + 双臂</strong></span>
-                  <span><small>核心机制</small><strong>Skill Capture Glove</strong></span>
-                  <span><small>产品阶段</small><strong>2026 年末 Beta 计划</strong></span>
-                  <span><small>研究重点</small><strong>家庭任务 / 技能学习 / 安全</strong></span>
-                </div>
+                <strong className="memo-feature-link">查看产品分析 ↗</strong>
               </div>
-              <div className="memo-feature-bottom"><span>打开九部分深度分析</span><strong>查看 Memo 分析 ↗</strong></div>
             </button>
 
             <div className="focus-list-heading">
               <h3>重点对照产品</h3>
-              <span>点击查看独立分析</span>
+              <span>按产品路线展开</span>
             </div>
-            <div className="focus-grid">
+            <div className="focus-grid-v2">
               {focusIds.filter((id) => id !== "memo").map((id) => {
                 const record = getRecord(id);
                 if (!record) return null;
                 return (
-                  <button key={record.id} type="button" className="focus-item" onClick={() => setSelectedRecord(record)}>
-                    <span className="focus-item-country">{record.country}</span>
-                    <strong>{record.name}</strong>
-                    <small>{record.company}</small>
-                    <span className="focus-item-note">{record.beaverValue}</span>
-                    <span className="focus-item-open">查看分析 ↗</span>
+                  <button key={record.id} type="button" className="focus-card-v2" onClick={() => setSelectedRecord(record)}>
+                    <div className="focus-card-image"><ProductVisual record={record} /></div>
+                    <div className="focus-card-copy">
+                      <span>{record.country}</span>
+                      <strong>{record.name}</strong>
+                      <small>{record.company}</small>
+                      <p>{record.positioning}</p>
+                      <b>查看分析 ↗</b>
+                    </div>
                   </button>
                 );
               })}
@@ -272,13 +253,12 @@ export function CompetitorExplorer() {
               <div>
                 <p className="panel-kicker">04 / CROSS-COMPARISON</p>
                 <h2 id="comparison-title">横向对比</h2>
-                <p className="panel-lead">不以单一总分排名，先比较产品形态、任务定位和成熟度。</p>
+                <p className="panel-lead">从移动方式、操作结构、任务方向和产品阶段看差异。</p>
               </div>
-              <span className="panel-index">8 KEY PRODUCTS</span>
             </div>
             <div className="comparison-table-wrap">
               <table className="comparison-table">
-                <thead><tr><th>产品</th><th>国家 / 企业</th><th>本体路线</th><th>主要任务方向</th><th>公开阶段</th><th></th></tr></thead>
+                <thead><tr><th>产品</th><th>国家 / 企业</th><th>本体路线</th><th>主要任务方向</th><th>产品阶段</th><th></th></tr></thead>
                 <tbody>
                   {comparisonIds.map((id) => {
                     const record = getRecord(id);
@@ -297,7 +277,6 @@ export function CompetitorExplorer() {
                 </tbody>
               </table>
             </div>
-            <p className="panel-footnote">不同产品的任务、测试条件与商业阶段不同，不适合直接用同一分数排序。下一轮可围绕同一任务建立统一测试维度。</p>
           </section>
         ) : null}
 
@@ -307,9 +286,8 @@ export function CompetitorExplorer() {
               <div>
                 <p className="panel-kicker">05 / BEAVER RESEARCH OPPORTUNITIES</p>
                 <h2 id="insights-title">Beaver 研究机会</h2>
-                <p className="panel-lead">以下是基于公开竞品资料形成的研究问题，不是已经验证的用户结论。</p>
+                <p className="panel-lead">从现有产品路线中提炼值得深入研究的产品问题。</p>
               </div>
-              <span className="panel-index">OPEN QUESTIONS</span>
             </div>
             <div className="insight-list">
               {researchInsights.map((insight, index) => (
@@ -318,24 +296,18 @@ export function CompetitorExplorer() {
                   <div className="insight-copy">
                     <h3>{insight.title}</h3>
                     <p>{insight.detail}</p>
-                    <div><strong>待研究：</strong>{insight.question}</div>
+                    <div><strong>研究问题</strong>{insight.question}</div>
                   </div>
                 </article>
               ))}
             </div>
             <div className="insight-conclusion">
-              <span>BEAVER / RESEARCH PRINCIPLE</span>
-              <strong>不先决定机器人应该长什么样，先证明人在什么情境下需要它完成什么任务。</strong>
+              <span>BEAVER / PRODUCT PRINCIPLE</span>
+              <strong>不先决定机器人应该长什么样，先理解人在什么情境下需要它完成什么任务。</strong>
             </div>
           </section>
         ) : null}
       </main>
-
-      <footer className="competitor-footer">
-        <span>COMP-001—006 / BEAVER</span>
-        <span>公开资料研究 · 持续更新</span>
-        <span>下一步：Sunday Memo 深度分析与竞品能力验证</span>
-      </footer>
 
       {selectedRecord ? (
         <CompetitorModal record={selectedRecord} onClose={() => setSelectedRecord(null)} />
@@ -344,73 +316,196 @@ export function CompetitorExplorer() {
   );
 }
 
+function ProductVisual({ record }: { record: CompetitorRecord }) {
+  if (record.image) {
+    return <img src={record.image} alt={record.imageAlt || record.name} loading="lazy" />;
+  }
+  const isPlatform = record.category === "platform";
+  const isWheeled = /轮式|底盘/.test(record.form);
+  const isHumanoid = /双足|人形/.test(record.form);
+  return (
+    <div className={"product-placeholder " + (isPlatform ? "platform-art" : isWheeled ? "wheeled-art" : isHumanoid ? "humanoid-art" : "adjacent-art")}>
+      {isPlatform ? (
+        <svg viewBox="0 0 260 180" aria-hidden="true">
+          <g fill="none" stroke="currentColor" strokeWidth="1.4" opacity=".72">
+            <path d="M130 38 68 82 130 130 194 82 130 38M68 82 68 142 130 130 194 142 194 82M130 38V130M68 82 194 142M194 82 68 142" />
+            <circle cx="130" cy="38" r="12"/><circle cx="68" cy="82" r="10"/><circle cx="194" cy="82" r="10"/><circle cx="68" cy="142" r="8"/><circle cx="194" cy="142" r="8"/><circle cx="130" cy="130" r="13"/>
+          </g>
+        </svg>
+      ) : (
+        <svg viewBox="0 0 260 180" aria-hidden="true">
+          <g fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" opacity=".8">
+            <circle cx="130" cy="28" r="15" />
+            <path d="M130 43V95M130 58 88 78 78 111M130 58 172 78 182 111" />
+            {isWheeled ? <><path d="M130 95V126"/><rect x="98" y="124" width="64" height="24" rx="8"/><circle cx="111" cy="153" r="7"/><circle cx="149" cy="153" r="7"/></> : <><path d="M130 95 105 128 96 161M130 95 155 128 164 161"/><path d="M84 163h23M153 163h23"/></>}
+          </g>
+        </svg>
+      )}
+      <span>{isPlatform ? "EMBODIED AI" : isWheeled ? "MOBILE MANIPULATION" : isHumanoid ? "HUMANOID ROBOT" : "HOME ROBOT"}</span>
+      <strong>{record.name}</strong>
+    </div>
+  );
+}
+
+function VisualFlow({ items }: { items: VisualFeature[] }) {
+  return (
+    <div className="visual-flow">
+      {items.map((item, index) => (
+        <div className="visual-flow-item" key={item.title}>
+          <span>{String(index + 1).padStart(2, "0")}</span>
+          <div><strong>{item.title}</strong><p>{item.detail}</p></div>
+          {index < items.length - 1 ? <i aria-hidden="true">→</i> : null}
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function TaskFlowCard({ task }: { task: TaskFlow }) {
+  return (
+    <article className="task-flow-card">
+      <div className="task-flow-head"><div><span>{task.context}</span><h4>{task.title}</h4></div><b>任务流程</b></div>
+      <div className="task-step-list">
+        {task.steps.map((step, index) => (
+          <div className="task-step" key={step}>
+            <span>{String(index + 1).padStart(2, "0")}</span>
+            <strong>{step}</strong>
+            {index < task.steps.length - 1 ? <i aria-hidden="true">↓</i> : null}
+          </div>
+        ))}
+      </div>
+      <div className="task-flow-outcome"><span>任务结果</span><strong>{task.outcome}</strong></div>
+    </article>
+  );
+}
+
+function FeatureGrid({ features }: { features: VisualFeature[] }) {
+  return (
+    <div className="detail-feature-grid">
+      {features.map((feature, index) => (
+        <article className="detail-feature" key={feature.title}>
+          <span>{String(index + 1).padStart(2, "0")}</span>
+          <h4>{feature.title}</h4>
+          <p>{feature.detail}</p>
+        </article>
+      ))}
+    </div>
+  );
+}
+
 function CompetitorModal({ record, onClose }: { record: CompetitorRecord; onClose: () => void }) {
-  const isMemo = record.id === "memo";
+  const jumpLinks = [
+    ["profile", "产品概览"],
+    ["tasks", "任务场景"],
+    ["technology", "技术路径"],
+    ["design", "产品设计"],
+    ["beaver", "Beaver 启发"],
+  ] as const;
+  const hasDetailedVisuals = Boolean(record.taskFlows?.length || record.architecture?.length || record.designFeatures?.length);
+
   return (
     <div className="competitor-modal-backdrop" role="presentation" onMouseDown={(event) => { if (event.target === event.currentTarget) onClose(); }}>
-      <section className="competitor-modal" role="dialog" aria-modal="true" aria-labelledby="competitor-modal-title">
-        <header className="modal-header">
-          <div>
-            <p className="modal-kicker">{record.company.toUpperCase()} / {categoryLabels[record.category].toUpperCase()}</p>
+      <section className="competitor-modal-v2" role="dialog" aria-modal="true" aria-labelledby="competitor-modal-title">
+        <button type="button" className="modal-close-v2" onClick={onClose} aria-label="关闭分析弹窗">×</button>
+
+        <header className="modal-hero-v2" id="profile">
+          <div className="modal-hero-visual"><ProductVisual record={record} /></div>
+          <div className="modal-hero-copy">
+            <p className="modal-company">{record.country} · {record.company}</p>
             <h2 id="competitor-modal-title">{record.name}</h2>
-            <p className="modal-subtitle">{record.country} · {record.form}</p>
+            <p className="modal-positioning">{record.positioning}</p>
+            <div className="modal-form-tags">
+              <span>{categoryLabels[record.category]}</span>
+              <span>{record.form}</span>
+            </div>
+            <div className="modal-stage"><small>产品阶段</small><strong>{record.stage}</strong></div>
           </div>
-          <button type="button" className="modal-close" onClick={onClose} aria-label="关闭分析弹窗">×</button>
         </header>
 
-        <div className="modal-highlight-grid">
-          <div><small>产品定位</small><strong>{record.positioning}</strong></div>
-          <div><small>发展阶段</small><strong>{record.stage}</strong></div>
-          <div><small>重点信息</small><strong>{record.keyFact}</strong></div>
-          <div><small>对 Beaver 的研究价值</small><strong>{record.beaverValue}</strong></div>
-        </div>
+        <nav className="modal-jump-nav" aria-label="产品分析目录">
+          {jumpLinks.map(([id, label]) => <a key={id} href={"#" + id}>{label}</a>)}
+          <a href="#sources">资料来源</a>
+        </nav>
 
-        {record.sections?.length ? (
-          <div className="modal-analysis">
-            <div className="modal-section-heading">
-              <h3>{isMemo ? "九部分产品深度分析" : "产品分析"}</h3>
-              <span>{record.sections.length} SECTIONS</span>
+        <section className="modal-section-v2">
+          <div className="modal-section-title"><span>01</span><h3>产品关键参数</h3></div>
+          {record.metrics?.length ? (
+            <div className="metric-card-grid">
+              {record.metrics.map((metric) => (
+                <div className="metric-card" key={metric.label}><small>{metric.label}</small><strong>{metric.value}</strong></div>
+              ))}
             </div>
-            {record.sections.map((section, index) => (
-              <article className="modal-analysis-row" key={section.title}>
-                <span>{String(index + 1).padStart(2, "0")}</span>
-                <div>
-                  <h4>{section.title}</h4>
-                  <p>{section.content}</p>
-                  <small>{section.evidence}</small>
-                </div>
-              </article>
-            ))}
-          </div>
-        ) : (
-          <div className="modal-analysis compact-analysis">
-            <div className="modal-section-heading"><h3>产品观察</h3><span>PUBLIC INFORMATION</span></div>
-            <article className="modal-analysis-row">
-              <span>01</span><div><h4>产品路线</h4><p>{record.form}。产品定位为：{record.positioning}。</p><small>官方资料归纳</small></div>
-            </article>
-            <article className="modal-analysis-row">
-              <span>02</span><div><h4>关键能力与任务</h4><p>{record.keyFact}</p><small>以公开产品资料为准</small></div>
-            </article>
-            <article className="modal-analysis-row">
-              <span>03</span><div><h4>发展阶段</h4><p>{record.stage}</p><small>截至 2026.11.16 的公开信息</small></div>
-            </article>
-            <article className="modal-analysis-row">
-              <span>04</span><div><h4>Beaver 研究价值</h4><p>{record.beaverValue}。该观察用于提出后续研究问题，不代表已形成产品方案。</p><small>研究判断</small></div>
-            </article>
-          </div>
-        )}
+          ) : (
+            <div className="profile-fact-grid">
+              <article><small>本体形态</small><strong>{record.form}</strong></article>
+              <article><small>产品定位</small><strong>{record.positioning}</strong></article>
+              <article><small>核心能力</small><strong>{record.keyFact}</strong></article>
+              <article><small>产品阶段</small><strong>{record.stage}</strong></article>
+            </div>
+          )}
+        </section>
 
-        <div className="modal-sources">
-          <div className="modal-section-heading"><h3>真实资料来源</h3><span>{record.links.length} LINKS</span></div>
-          <div className="modal-source-list">
+        {record.taskFlows?.length ? (
+          <section className="modal-section-v2" id="tasks">
+            <div className="modal-section-title"><span>02</span><h3>任务场景拆解</h3></div>
+            <div className="task-flow-grid">
+              {record.taskFlows.map((task) => <TaskFlowCard key={task.title} task={task} />)}
+            </div>
+          </section>
+        ) : null}
+
+        {record.architecture?.length ? (
+          <section className="modal-section-v2" id="technology">
+            <div className="modal-section-title"><span>03</span><h3>技术与执行路径</h3></div>
+            <VisualFlow items={record.architecture} />
+          </section>
+        ) : null}
+
+        {record.designFeatures?.length ? (
+          <section className="modal-section-v2" id="design">
+            <div className="modal-section-title"><span>04</span><h3>本体与产品设计</h3></div>
+            <FeatureGrid features={record.designFeatures} />
+          </section>
+        ) : null}
+
+        <section className="modal-section-v2">
+          <div className="modal-section-title"><span>{hasDetailedVisuals ? "05" : "02"}</span><h3>产品能力分析</h3></div>
+          <div className="strength-boundary-grid">
+            <article className="strength-panel">
+              <h4>产品亮点</h4>
+              <ul>{(record.advantages?.length ? record.advantages : [record.keyFact, record.positioning]).map((item) => <li key={item}>{item}</li>)}</ul>
+            </article>
+            <article className="boundary-panel">
+              <h4>产品阶段与能力边界</h4>
+              <ul>{(record.boundaries?.length ? record.boundaries : [record.stage, record.beaverValue]).map((item) => <li key={item}>{item}</li>)}</ul>
+            </article>
+          </div>
+        </section>
+
+        <section className="modal-section-v2" id="beaver">
+          <div className="modal-section-title"><span>{hasDetailedVisuals ? "06" : "03"}</span><h3>对 Beaver 的研究启发</h3></div>
+          <div className="beaver-takeaway">
+            <p>{record.beaverValue}</p>
+            {record.beaverQuestions?.length ? (
+              <div className="beaver-question-grid">
+                {record.beaverQuestions.map((question, index) => (
+                  <article key={question}><span>{String(index + 1).padStart(2, "0")}</span><strong>{question}</strong></article>
+                ))}
+              </div>
+            ) : null}
+          </div>
+        </section>
+
+        <section className="modal-section-v2 modal-source-section" id="sources">
+          <div className="modal-section-title"><span>↗</span><h3>资料来源</h3></div>
+          <div className="modal-source-grid">
             {record.links.map((link) => (
               <a key={link.url} href={link.url} target="_blank" rel="noreferrer">
-                <span>{link.label}</span><strong>打开网页 ↗</strong>
+                <span>{link.label}</span><strong>访问原文 ↗</strong>
               </a>
             ))}
           </div>
-        </div>
-        <div className="modal-disclaimer">说明：企业官网资料代表企业公开披露；产品能力、交付状态和测试结果仍需独立验证。未公开的信息不作推断。</div>
+        </section>
       </section>
     </div>
   );

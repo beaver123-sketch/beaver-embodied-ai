@@ -121,7 +121,6 @@ export function CompetitorExplorer() {
                 <div className="market-signal" key={signal.label}>
                   <strong>{signal.value}</strong>
                   <span>{signal.label}</span>
-                  <small>{signal.note}</small>
                 </div>
               ))}
             </div>
@@ -423,7 +422,11 @@ function CompetitorModal({ record, onClose }: { record: CompetitorRecord; onClos
         </header>
 
         <nav className="modal-jump-nav" aria-label="产品分析目录">
-          {jumpLinks.map(([id, label]) => <a key={id} href={"#" + id}>{label}</a>)}
+          <a href="#profile">产品概览</a>
+          {record.taskFlows?.length ? <a href="#tasks">任务场景</a> : null}
+          {record.architecture?.length ? <a href="#technology">技术路径</a> : null}
+          {record.designFeatures?.length ? <a href="#design">产品设计</a> : null}
+          <a href="#beaver">Beaver 启发</a>
           <a href="#sources">资料来源</a>
         </nav>
 
@@ -476,8 +479,8 @@ function CompetitorModal({ record, onClose }: { record: CompetitorRecord; onClos
               <ul>{(record.advantages?.length ? record.advantages : [record.keyFact, record.positioning]).map((item) => <li key={item}>{item}</li>)}</ul>
             </article>
             <article className="boundary-panel">
-              <h4>产品阶段与能力边界</h4>
-              <ul>{(record.boundaries?.length ? record.boundaries : [record.stage, record.beaverValue]).map((item) => <li key={item}>{item}</li>)}</ul>
+              <h4>{record.boundaries?.length ? "产品阶段与能力边界" : "产品发展阶段"}</h4>
+              <ul>{(record.boundaries?.length ? record.boundaries : [record.stage]).map((item) => <li key={item}>{item}</li>)}</ul>
             </article>
           </div>
         </section>

@@ -317,32 +317,229 @@ export function CompetitorExplorer() {
 
 function ProductVisual({ record }: { record: CompetitorRecord }) {
   if (record.image) {
-    return <img src={record.image} alt={record.imageAlt || record.name} loading="lazy" />;
+    return (
+      <div className="product-photo">
+        <img src={record.image} alt={record.imageAlt || record.name} loading="lazy" />
+        <span className="product-visual-label">官方产品图</span>
+      </div>
+    );
   }
-  const isPlatform = record.category === "platform";
-  const isWheeled = /轮式|底盘/.test(record.form);
-  const isHumanoid = /双足|人形/.test(record.form);
+
+  const diagramType =
+    record.category === "platform" ? "platform" :
+    record.category === "mobile" ? "mobile" :
+    record.category === "adjacent" ? "adjacent" : "humanoid";
+
   return (
-    <div className={"product-placeholder " + (isPlatform ? "platform-art" : isWheeled ? "wheeled-art" : isHumanoid ? "humanoid-art" : "adjacent-art")}>
-      {isPlatform ? (
-        <svg viewBox="0 0 260 180" aria-hidden="true">
-          <g fill="none" stroke="currentColor" strokeWidth="1.4" opacity=".72">
-            <path d="M130 38 68 82 130 130 194 82 130 38M68 82 68 142 130 130 194 142 194 82M130 38V130M68 82 194 142M194 82 68 142" />
-            <circle cx="130" cy="38" r="12"/><circle cx="68" cy="82" r="10"/><circle cx="194" cy="82" r="10"/><circle cx="68" cy="142" r="8"/><circle cx="194" cy="142" r="8"/><circle cx="130" cy="130" r="13"/>
-          </g>
-        </svg>
-      ) : (
-        <svg viewBox="0 0 260 180" aria-hidden="true">
-          <g fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" opacity=".8">
-            <circle cx="130" cy="28" r="15" />
-            <path d="M130 43V95M130 58 88 78 78 111M130 58 172 78 182 111" />
-            {isWheeled ? <><path d="M130 95V126"/><rect x="98" y="124" width="64" height="24" rx="8"/><circle cx="111" cy="153" r="7"/><circle cx="149" cy="153" r="7"/></> : <><path d="M130 95 105 128 96 161M130 95 155 128 164 161"/><path d="M84 163h23M153 163h23"/></>}
-          </g>
-        </svg>
-      )}
-      <span>{isPlatform ? "EMBODIED AI" : isWheeled ? "MOBILE MANIPULATION" : isHumanoid ? "HUMANOID ROBOT" : "HOME ROBOT"}</span>
-      <strong>{record.name}</strong>
+    <div className={"product-placeholder " + diagramType + "-art"}>
+      <div className="product-art-overline">
+        <span>{diagramType === "platform" ? "AI / MODEL ARCHITECTURE" : diagramType === "mobile" ? "MOBILE MANIPULATION" : diagramType === "adjacent" ? "HOME ROBOT FORM" : "HUMANOID ROBOT FORM"}</span>
+        <span>研究示意</span>
+      </div>
+      {diagramType === "platform" ? <PlatformIllustration record={record} /> :
+       diagramType === "mobile" ? <MobileIllustration record={record} /> :
+       diagramType === "adjacent" ? <AdjacentIllustration record={record} /> :
+       <HumanoidIllustration record={record} />}
+      <div className="product-art-caption">
+        <strong>{record.name}</strong>
+        <small>{record.form}</small>
+        <span>结构 / 技术路线示意，非官方产品照片</span>
+      </div>
     </div>
+  );
+}
+
+function HumanoidIllustration({ record }: { record: CompetitorRecord }) {
+  const compact = ["unitree-g1", "agibot-x2"].includes(record.id);
+  const broad = ["atlas", "engineai-t800", "digit5"].includes(record.id);
+  const soft = ["fourier-gr3", "neura"].includes(record.id);
+  const digit = record.id === "digit5";
+  const modular = ["apollo2", "hmnd01", "leju-kuavo"].includes(record.id);
+  const face = record.id === "walker-s2" ? "#6c7d91" : record.id === "xpeng-iron" ? "#55565c" : "#62636a";
+  const shoulder = broad ? 58 : compact ? 42 : 50;
+  const torsoWidth = broad ? 76 : compact ? 58 : soft ? 62 : 68;
+  const torsoPath = "M" + (210-torsoWidth/2) + " 61 Q210 54 " + (210+torsoWidth/2) + " 61 L" + (210+torsoWidth/2-4) + " 130 Q210 145 " + (210-torsoWidth/2+4) + " 130Z";
+  const leftArm = "M" + (210-shoulder/2) + " 73 L" + (210-shoulder/2-25) + " 88 L" + (210-shoulder/2-32) + " 139";
+  const rightArm = "M" + (210+shoulder/2) + " 73 L" + (210+shoulder/2+25) + " 88 L" + (210+shoulder/2+32) + " 139";
+  return (
+    <svg className="schematic-svg humanoid-svg" viewBox="0 0 420 250" role="img" aria-label={record.name + " 本体结构示意图"}>
+      <path d="M42 220H378" stroke="#d6d7da" strokeWidth="1.5" />
+      <path d="M82 224H338" stroke="#ececef" strokeWidth="5" strokeLinecap="round" />
+      <g transform={compact ? "translate(0 18) scale(.9)" : "translate(0 0)"}>
+        <rect x="196" y="43" width="28" height="15" rx="6" fill="#8f9197" />
+        {soft ? (
+          <ellipse cx="210" cy="28" rx="25" ry="24" fill="#e1e2e5" stroke="#85878d" strokeWidth="2" />
+        ) : (
+          <rect x="187" y="7" width="46" height="43" rx={digit ? 11 : 8} fill="#e1e2e5" stroke="#85878d" strokeWidth="2" />
+        )}
+        <rect x="195" y="22" width="30" height="7" rx="3.5" fill={face} />
+        <circle cx="201" cy="25.5" r="1.5" fill="#e9eaec" />
+        <circle cx="219" cy="25.5" r="1.5" fill="#e9eaec" />
+        <path d={torsoPath} fill="#d2d4d8" stroke="#85878d" strokeWidth="2" />
+        <path d="M190 72 Q210 82 230 72" fill="none" stroke="#b1b3b8" strokeWidth="2" />
+        <rect x={210-shoulder/2} y="84" width={shoulder} height="28" rx="10" fill="#c7c9ce" opacity=".9" />
+        <rect x="199" y="91" width="22" height="29" rx="5" fill="#777a82" />
+        <rect x="204" y="96" width="12" height="17" rx="3" fill="#dfe0e3" />
+        <path d={leftArm} fill="none" stroke="#d9dade" strokeWidth={broad ? 19 : 16} strokeLinecap="round" strokeLinejoin="round" />
+        <path d={rightArm} fill="none" stroke="#d9dade" strokeWidth={broad ? 19 : 16} strokeLinecap="round" strokeLinejoin="round" />
+        <circle cx={210-shoulder/2-25} cy="88" r="9" fill="#62656d" />
+        <circle cx={210+shoulder/2+25} cy="88" r="9" fill="#62656d" />
+        <circle cx={210-shoulder/2-32} cy="139" r="7" fill="#62656d" />
+        <circle cx={210+shoulder/2+32} cy="139" r="7" fill="#62656d" />
+        <path d={"M"+(210-shoulder/2-32)+" 139l-5 12 M"+(210+shoulder/2+32)+" 139l5 12"} stroke="#777981" strokeWidth="5" strokeLinecap="round" />
+        <path d="M190 130 L185 151 L197 165 L196 197 L187 216" fill="none" stroke="#d5d7db" strokeWidth={broad ? 22 : 19} strokeLinecap="round" strokeLinejoin="round" />
+        <path d="M230 130 L235 151 L223 165 L224 197 L233 216" fill="none" stroke="#d5d7db" strokeWidth={broad ? 22 : 19} strokeLinecap="round" strokeLinejoin="round" />
+        {digit ? (
+          <>
+            <path d="M185 151 L176 176 L188 190 L181 215 M235 151 L244 176 L232 190 L239 215" fill="none" stroke="#8e9299" strokeWidth="8" strokeLinecap="round" strokeLinejoin="round" />
+            <path d="M181 216h-17M239 216h17" stroke="#62656c" strokeWidth="6" strokeLinecap="round" />
+          </>
+        ) : (
+          <path d="M187 216h-18M233 216h18" stroke="#62656c" strokeWidth="7" strokeLinecap="round" />
+        )}
+        <circle cx="185" cy="151" r="8" fill="#62656d" />
+        <circle cx="235" cy="151" r="8" fill="#62656d" />
+        <circle cx="196" cy="197" r="7" fill="#62656d" />
+        <circle cx="224" cy="197" r="7" fill="#62656d" />
+        {modular ? (
+          <>
+            <path d="M170 58H148V48M250 58H272V48" fill="none" stroke="#a1a3a9" strokeWidth="1.2" strokeDasharray="3 3" />
+            <rect x="130" y="34" width="42" height="18" rx="5" fill="#f7f7f8" stroke="#bfc1c5" />
+            <rect x="248" y="34" width="42" height="18" rx="5" fill="#f7f7f8" stroke="#bfc1c5" />
+          </>
+        ) : null}
+      </g>
+      <g fill="#777980" fontSize="10" fontFamily="Arial, sans-serif">
+        <text x="24" y="82">上肢操作</text>
+        <path d="M78 79H130L166 91" stroke="#b4b6bb" strokeWidth="1" fill="none" />
+        <text x="290" y="166">双足移动</text>
+        <path d="M285 162H264L238 186" stroke="#b4b6bb" strokeWidth="1" fill="none" />
+        {modular ? <text x="210" y="242" textAnchor="middle">模块化 / 双形态结构</text> : null}
+      </g>
+    </svg>
+  );
+}
+
+function MobileIllustration({ record }: { record: CompetitorRecord }) {
+  const singleArm = record.id === "stretch3" || record.id === "tiago";
+  const tiago = record.id === "tiago";
+  const stretch = record.id === "stretch3";
+  const industrial = record.id === "galbot-s1";
+  const baseX = industrial ? 118 : 132;
+  const baseWidth = industrial ? 184 : 156;
+  return (
+    <svg className="schematic-svg mobile-svg" viewBox="0 0 420 250" role="img" aria-label={record.name + " 移动操作结构示意图"}>
+      <path d="M38 214H382" stroke="#d7d8dc" strokeWidth="1.5" />
+      <rect x={baseX} y="181" width={baseWidth} height="25" rx="9" fill="#d4d6da" stroke="#777a82" strokeWidth="2" />
+      <circle cx={baseX+20} cy="210" r="11" fill="#62656d" stroke="#aeb0b5" strokeWidth="3" />
+      <circle cx={baseX+baseWidth-20} cy="210" r="11" fill="#62656d" stroke="#aeb0b5" strokeWidth="3" />
+      <rect x="198" y={stretch ? 83 : 65} width="24" height={stretch ? 99 : 117} rx="8" fill="#d4d6da" stroke="#777a82" strokeWidth="2" />
+      {tiago ? (
+        <>
+          <rect x="186" y="35" width="48" height="30" rx="8" fill="#e1e2e5" stroke="#777a82" strokeWidth="2" />
+          <rect x="197" y="45" width="26" height="8" rx="4" fill="#5d626b" />
+        </>
+      ) : (
+        <rect x="183" y={stretch ? 57 : 42} width="54" height="22" rx="8" fill="#d9dade" stroke="#777a82" strokeWidth="2" />
+      )}
+      {singleArm ? (
+        <>
+          <path d="M210 93 L258 93 L292 112 L322 112" fill="none" stroke="#9b9ea5" strokeWidth={stretch ? 10 : 15} strokeLinecap="round" strokeLinejoin="round" />
+          <circle cx="258" cy="93" r="8" fill="#666a72" />
+          <circle cx="292" cy="112" r="7" fill="#666a72" />
+          <path d="M322 112l13 -7m-13 7 13 7" stroke="#666a72" strokeWidth="3" strokeLinecap="round" />
+          {tiago ? <path d="M210 95L165 113L147 141" fill="none" stroke="#c2c4c9" strokeWidth="12" strokeLinecap="round" /> : null}
+        </>
+      ) : (
+        <>
+          <path d="M194 80L151 97L136 132M226 80L269 97L284 132" fill="none" stroke="#aeb1b7" strokeWidth="15" strokeLinecap="round" strokeLinejoin="round" />
+          <circle cx="151" cy="97" r="8" fill="#666a72" /><circle cx="269" cy="97" r="8" fill="#666a72" />
+          <path d="M136 132l-9 10m9-10 10 8M284 132l-10 10m10-10 10 8" stroke="#666a72" strokeWidth="3" strokeLinecap="round" />
+        </>
+      )}
+      <g fill="#777980" fontSize="10" fontFamily="Arial, sans-serif">
+        <text x="25" y="66">{stretch ? "伸缩机械臂" : tiago ? "模块化机械臂" : "双臂操作"}</text>
+        <path d="M91 63H144L171 91" stroke="#b4b6bb" strokeWidth="1" fill="none" />
+        <text x="288" y="166">{industrial ? "高负载底盘" : "升降 / 移动底盘"}</text>
+        <path d="M286 162H268L255 184" stroke="#b4b6bb" strokeWidth="1" fill="none" />
+        <text x="210" y="239" textAnchor="middle">轮式移动 · 定点操作 · 室内导航</text>
+      </g>
+    </svg>
+  );
+}
+
+function AdjacentIllustration({ record }: { record: CompetitorRecord }) {
+  const ballie = record.id === "ballie";
+  return (
+    <svg className="schematic-svg adjacent-svg" viewBox="0 0 420 250" role="img" aria-label={record.name + " 家庭机器人形态示意图"}>
+      <path d="M40 213H380" stroke="#d7d8dc" strokeWidth="1.5" />
+      {ballie ? (
+        <>
+          <ellipse cx="210" cy="163" rx="76" ry="20" fill="#dfe0e3" opacity=".55" />
+          <circle cx="210" cy="124" r="77" fill="#e1e2e5" stroke="#85878d" strokeWidth="2" />
+          <path d="M155 88Q210 49 265 88" fill="none" stroke="#a5a7ad" strokeWidth="3" />
+          <rect x="184" y="105" width="52" height="20" rx="9" fill="#555961" />
+          <circle cx="200" cy="115" r="3" fill="#e5e6e8" /><circle cx="220" cy="115" r="3" fill="#e5e6e8" />
+          <path d="M255 76L322 40L308 92Z" fill="#e4e5e8" opacity=".5" />
+          <circle cx="178" cy="195" r="8" fill="#777a82" /><circle cx="242" cy="195" r="8" fill="#777a82" />
+          <text x="210" y="232" textAnchor="middle" fill="#777980" fontSize="10">球形移动 · 环境感知 · 投影交互</text>
+        </>
+      ) : (
+        <>
+          <rect x="164" y="157" width="92" height="48" rx="15" fill="#d4d6da" stroke="#85878d" strokeWidth="2" />
+          <circle cx="184" cy="207" r="9" fill="#62656d" /><circle cx="236" cy="207" r="9" fill="#62656d" />
+          <rect x="183" y="63" width="54" height="96" rx="12" fill="#d4d6da" stroke="#85878d" strokeWidth="2" />
+          <rect x="177" y="47" width="66" height="83" rx="12" fill="#3f424a" stroke="#777a82" strokeWidth="2" />
+          <rect x="184" y="55" width="52" height="66" rx="7" fill="#d8dadd" />
+          <circle cx="210" cy="70" r="4" fill="#5f636b" />
+          <path d="M176 148L148 131L139 113M244 148L272 131L281 113" stroke="#bfc1c6" strokeWidth="8" strokeLinecap="round" />
+          <text x="210" y="232" textAnchor="middle" fill="#777980" fontSize="10">自主导航 · 家庭感知 · 屏幕交互</text>
+        </>
+      )}
+    </svg>
+  );
+}
+
+function PlatformIllustration({ record }: { record: CompetitorRecord }) {
+  const labels: Record<string, string[]> = {
+    "sunday-act": ["示范采集", "技能学习", "Skill Library", "任务执行"],
+    "1x-redwood": ["多模态感知", "Redwood AI", "自主执行", "专家辅助"],
+    "figure-helix": ["视觉 / 语言", "Helix 模型", "全身控制", "任务反馈"],
+    "gemini-robotics": ["多模态输入", "推理规划", "动作生成", "本体适配"],
+    "nvidia-gr00t": ["数据采集", "GR00T 模型", "仿真训练", "部署运行"],
+    "physical-intelligence": ["示范数据", "π0.5 模型", "长程规划", "移动操作"],
+    "x-square-wall": ["感知输入", "WALL 模型", "技能迁移", "真实执行"],
+    "xiaomi-robotics": ["真实轨迹", "VLA 模型", "技能泛化", "机器人执行"],
+    "skild-brain": ["跨形态数据", "Skild Brain", "策略迁移", "多本体执行"],
+  };
+  const steps = labels[record.id] || ["数据输入", "智能模型", "动作生成", "任务反馈"];
+  return (
+    <svg className="schematic-svg platform-svg" viewBox="0 0 420 250" role="img" aria-label={record.name + " 技术架构示意图"}>
+      <path d="M32 177H388" stroke="#d9dade" strokeWidth="1.5" />
+      {steps.map((step, index) => {
+        const x = 17 + index * 101;
+        return (
+          <g key={step}>
+            <rect x={x} y="75" width="83" height="74" rx="10" fill={index === 1 ? "#dedfe3" : "#f8f8f9"} stroke={index === 1 ? "#858890" : "#c8cacf"} strokeWidth="1.5" />
+            <circle cx={x + 15} cy="91" r="5" fill={index === 1 ? "#62666f" : "#a0a3aa"} />
+            <text x={x + 41.5} y="113" textAnchor="middle" fill="#4e5158" fontSize="10" fontWeight="600">{step.length > 8 ? step.slice(0, 8) : step}</text>
+            <text x={x + 41.5} y="130" textAnchor="middle" fill="#999ca2" fontSize="8">{["INPUT", "MODEL", "POLICY", "OUTPUT"][index]}</text>
+            {index < steps.length - 1 ? (
+              <g stroke="#9699a0" fill="none" strokeWidth="1.5">
+                <path d={"M" + (x + 84) + " 112H" + (x + 96)} />
+                <path d={"M" + (x + 92) + " 108L" + (x + 97) + " 112L" + (x + 92) + " 116"} />
+              </g>
+            ) : null}
+          </g>
+        );
+      })}
+      <path d="M370 163V190H52V163" fill="none" stroke="#b3b5bb" strokeWidth="1.2" strokeDasharray="4 4" />
+      <path d="M47 169L52 162L57 169" fill="none" stroke="#b3b5bb" strokeWidth="1.2" />
+      <g fill="#858890" fontSize="10" fontFamily="Arial, sans-serif">
+        <text x="210" y="211" textAnchor="middle">训练 / 推理 / 执行反馈闭环</text>
+        <text x="210" y="230" textAnchor="middle" fontSize="8">EMBODIED AI SYSTEM</text>
+      </g>
+    </svg>
   );
 }
 

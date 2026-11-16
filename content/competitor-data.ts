@@ -341,6 +341,8 @@ export const robots: CompetitorRecord[] = [
     positioning: "人形机器人研发、运动控制与具身智能平台",
     stage: "公开销售；基础版与 EDU 版本能力不同",
     keyFact: "约 1.32 m、约 35 kg；23–43 个关节电机（依配置）",
+    image: "https://shop.unitree.com/cdn/shop/files/1_968fd08b-9aaf-4f32-b895-5c786285ee52.jpg?v=1717575256",
+    imageAlt: "Unitree G1 官方产品图",
     beaverValue: "人形尺度、关节自由度、运动与操作能力的权衡",
     priority: "重点对比",
     links: [
@@ -393,6 +395,8 @@ export const robots: CompetitorRecord[] = [
     positioning: "工业制造与连续作业",
     stage: "官方披露进入量产交付阶段",
     keyFact: "自主换电、双臂协同换电、工业搬运与上下料",
+    image: "https://mma.prnewswire.com/media/2824516/photo1.jpg",
+    imageAlt: "优必选 Walker S2 产品图",
     beaverValue: "续航补能、维护流程、长时间运行与安全机制",
     links: [
       { label: "Walker S2 官方产品页", url: "https://www.ubtrobot.com/cn/humanoid/products/walker-s2" },
@@ -408,6 +412,8 @@ export const robots: CompetitorRecord[] = [
     positioning: "Care-bot；陪伴、交互与服务",
     stage: "产品技术资料公开；规模化家庭交付未证实",
     keyFact: "视觉、听觉、触觉融合；强调亲和外观与情感交互",
+    image: "https://mma.prnewswire.com/media/2856122/9f1e8b0a6de0ab741c0e1afc788ac1c6.jpg",
+    imageAlt: "傅利叶 GR-3 产品图",
     beaverValue: "机器人亲和感、触觉反馈与不同人群的交互体验",
     links: [
       { label: "GR-3 官方技术文档", url: "https://support.fftai.com/en/gr3/getting-started/general-information" },
@@ -424,6 +430,8 @@ export const robots: CompetitorRecord[] = [
     positioning: "通用人形机器人及行业应用平台",
     stage: "产品系列公开；面向科研、商业服务与工业应用",
     keyFact: "提供双足与轮臂形态，覆盖研究、商业服务和制造场景",
+    image: "https://kuavo.lejurobot.com/leju_website/images/17a22251b4267788bf254dd22c543175.jpg",
+    imageAlt: "乐聚 KUAVO 5 官方产品图",
     beaverValue: "同一产品平台如何根据任务切换移动形态",
     links: [
       { label: "乐聚官方产品页", url: "https://www.lejurobot.com/zh" },

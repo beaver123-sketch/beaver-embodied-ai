@@ -1,39 +1,35 @@
-# Beaver — Human-centered embodied AI research & product design
+# Beaver
 
-Beaver explores an embodied general-purpose robot for real family life.
+**项目定位：以人为本的具身智能机器人产品研究与设计。**
 
-**People first. Home first. The robot adapts to people — people do not adapt their home around a robot.**
+Beaver 是一个研究驱动的具身智能通用机器人产品设计作品集。首期面向一线城市年轻职场人及其家庭，研究真实家庭生活空间中的人机共居、用户需求与机器人产品定义。
 
-## Audience and first scenarios
-- Young professionals and households in first-tier Chinese cities.
-- Everyday home life; living with pets; friends gathering at home; short stays by older family members.
+## Human-centered principles
+- 人的生活习惯和空间优先，机器人适应人而不是反过来。
+- 家庭是第一阶段研究场景，不限制未来的通用机器人应用领域。
+- 机器人形态、能力与技术方案由研究和验证决定，不提前锁死。
+- 将事实、研究假设和待验证内容清楚分开。
 
-## Research principles
-- Do not preselect a robot body, form factor, or feature set before evidence supports it.
-- Treat home environments and human routines as the starting point for product definition.
-- Distinguish verified evidence, working hypotheses, and open questions.
-- Do not claim interviews, tests, technical feasibility, or performance results that have not happened.
+## Site navigation
+Home · Project · Industry Research · Competitor Research · User Research · Spatial Design · Product Design · Validation
 
-## Website
-Home · Project · Research · Spatial Design · Product Design · Validation
-
-## Ten-stage process
+## Delivery stages
 1. Project charter and research framework
 2. Industry and technology research
 3. Competitor research
 4. User research
-5. Domestic space and human–robot co-living
+5. Home spatial and human–robot co-living research
 6. User needs and product opportunities
-7. Product positioning and definition
+7. Positioning and product definition
 8. Robot body and interaction design
-9. Technical feasibility and product validation
-10. Portfolio documentation and publication
+9. Feasibility and validation
+10. Portfolio consolidation and release
 
-## Stack
-Next.js · TypeScript · Tailwind CSS · MDX · SVG diagrams
+## Current scope — V0.2
+The focus is visual structure, horizontal navigation and interactive module tabs. Content areas intentionally show research scopes and planned outputs instead of invented findings.
 
-## Branches
-- dev — development and preview
-- main — production
-
-V0.1 establishes the project framework and research workspace. It does not present planned research as completed research. Current validation status is stated explicitly on the Validation page.
+## Deployment policy
+- Batch edits together into a single commit.
+- Use the dev branch for Vercel Preview.
+- Keep main unchanged until reviewed and approved.
+- GitHub: https://github.com/beaver123-sketch/beaver-embodied-ai

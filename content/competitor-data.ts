@@ -11,6 +11,10 @@ export type SourceLink = {
   url: string;
 };
 
+export type VisualMetric = { label: string; value: string };
+export type TaskFlow = { title: string; context: string; steps: string[]; outcome: string };
+export type VisualFeature = { title: string; detail: string };
+
 export type CompetitorRecord = {
   id: string;
   name: string;
@@ -22,6 +26,15 @@ export type CompetitorRecord = {
   stage: string;
   keyFact: string;
   beaverValue: string;
+  image?: string;
+  imageAlt?: string;
+  metrics?: VisualMetric[];
+  taskFlows?: TaskFlow[];
+  architecture?: VisualFeature[];
+  designFeatures?: VisualFeature[];
+  advantages?: string[];
+  boundaries?: string[];
+  beaverQuestions?: string[];
   links: SourceLink[];
   sections?: ResearchSection[];
   featured?: boolean;
@@ -47,6 +60,48 @@ export const robots: CompetitorRecord[] = [
     positioning: "面向忙碌家庭的日常事务机器人",
     stage: "2026 年末 Beta 计划；尚未开放零售",
     keyFact: "技能采集手套 + Skill Library；重点展示餐后清理、洗碗机装载、咖啡与衣物整理",
+    image: "https://image.mux.com/xLLkokRSG7wrmPVmYfSE3Hz2TwlKI83Ohf8vHejgI4o/thumbnail.webp?time=0",
+    imageAlt: "Sunday Memo 在家庭餐厅执行餐桌清理任务",
+    metrics: [
+      { label: "移动结构", value: "轮式底盘" },
+      { label: "操作结构", value: "升降结构 + 双臂" },
+      { label: "常用高度", value: "约 4 ft" },
+      { label: "手臂可达", value: "最高约 7 ft" },
+      { label: "当前阶段", value: "2026 年末 Beta" },
+      { label: "手工制造成本", value: "约 $20,000 / 台" },
+    ],
+    taskFlows: [
+      { title: "餐后清理", context: "厨房 / 餐厅", steps: ["收集餐具与杯具", "清理餐桌与食物残渣", "分类装入洗碗机", "启动洗碗机"], outcome: "完成餐后收尾流程" },
+      { title: "咖啡制作", context: "厨房台面", steps: ["识别咖啡机与器具", "操作咖啡机", "完成咖啡萃取"], outcome: "执行一项连续的厨房操作任务" },
+      { title: "衣物整理", context: "卧室 / 洗衣区", steps: ["识别袜子等衣物", "抓取并整理衣物", "完成折叠"], outcome: "处理柔性物体与重复整理动作" },
+    ],
+    architecture: [
+      { title: "人的操作示范", detail: "Memory Developers 在真实生活环境中完成家务操作。" },
+      { title: "动作数据采集", detail: "Skill Capture Glove 记录人的手部动作与操作过程。" },
+      { title: "技能训练与沉淀", detail: "数据进入训练流程，形成可持续扩展的 Skill Library。" },
+      { title: "机器人自主执行", detail: "Memo 调用已学习技能，在家庭中完成对应任务。" },
+    ],
+    designFeatures: [
+      { title: "低重心与稳定轮距", detail: "以稳定的移动底盘支撑家庭环境中的双臂操作。" },
+      { title: "柔软硅胶外壳", detail: "减少尖锐硬质外露，表面可使用家用清洁产品擦拭。" },
+      { title: "轻量化机身", detail: "降低家庭共处环境中的碰撞与接触风险。" },
+      { title: "可升降操作结构", detail: "手臂可降低接近地面，也可伸展至较高的家庭操作区域。" },
+    ],
+    advantages: [
+      "以真实家庭任务作为产品能力的起点，而不是先限定单一功能。",
+      "通过人的操作示范建立技能数据，再将技能沉淀为可扩展能力。",
+      "低重心、柔性外壳和易清洁设计直接回应家庭使用环境。",
+    ],
+    boundaries: [
+      "目前处于 Beta 计划阶段，尚未开放普通零售购买。",
+      "Sunday 仍在持续提升技能可靠性与不同家庭环境下的泛化能力。",
+      "约 $20,000 为当前手工制造成本，不是对外零售价。",
+    ],
+    beaverQuestions: [
+      "不同户型、台面高度和家电布局下，机器人需要怎样的可达范围与移动能力？",
+      "多步骤家务中断后，机器人如何识别进度并恢复任务？",
+      "与儿童、老人和宠物共处时，如何设计接触、避让与人工接管机制？",
+    ],
     beaverValue: "家庭任务定义、技能学习闭环、本体与家庭安全设计",
     featured: true,
     priority: "重点研究",
@@ -77,6 +132,47 @@ export const robots: CompetitorRecord[] = [
     positioning: "面向消费者家庭的通用家用机器人",
     stage: "已开放预订；首批交付计划于 2026 年启动",
     keyFact: "Redwood AI 自主能力 + Scheduled Expert Mode 远程专家辅助",
+    image: "https://cdn.sanity.io/images/qka6yvsc/production/8353aa0348b725209afd88990b7d51ca050176e2-4096x2730.jpg",
+    imageAlt: "1X NEO 家庭机器人产品展示",
+    metrics: [
+      { label: "身高", value: "5 ft 6 in" },
+      { label: "重量", value: "66 lb" },
+      { label: "手部自由度", value: "22 × 2" },
+      { label: "手臂自由度", value: "7 × 2" },
+      { label: "手臂负载", value: "18 lb" },
+      { label: "预订方式", value: "$200 定金" },
+    ],
+    taskFlows: [
+      { title: "家庭任务执行", context: "家庭日常", steps: ["语音或 App 创建任务", "设定任务清单与执行时间", "NEO 自主执行已掌握的家务"], outcome: "把重复家务转化为可安排的日常任务" },
+      { title: "新任务学习", context: "尚未掌握的家务", steps: ["用户安排任务", "预约 1X Expert", "专家远程指导执行", "NEO 学习并积累新能力"], outcome: "以专家辅助补足当前自主能力" },
+    ],
+    architecture: [
+      { title: "用户指令", detail: "通过自然语音或 NEO App 创建、安排和管理家务。" },
+      { title: "Redwood AI", detail: "理解家庭任务并调用机器人已有的自主能力。" },
+      { title: "自主执行", detail: "完成已掌握的移动、抓取与家务操作。" },
+      { title: "Scheduled Expert Mode", detail: "复杂或未知任务可预约 1X Expert 远程指导。" },
+    ],
+    designFeatures: [
+      { title: "柔性外覆", detail: "定制 3D lattice 聚合物包覆内部硬件，提供缓冲。" },
+      { title: "Tendon Drive", detail: "腱绳驱动结构支持低能量、柔和的动作控制。" },
+      { title: "关节防夹设计", detail: "关节外部覆盖，降低手指接触活动关节的风险。" },
+      { title: "可清洗织物外套", detail: "软质织物与鞋套可拆卸清洗。" },
+    ],
+    advantages: [
+      "将语音、移动 App、任务排程和机器人执行整合为完整家庭体验。",
+      "柔性外覆与腱绳驱动从结构层面考虑家庭接触安全。",
+      "通过预约专家辅助处理机器人暂时无法独立完成的任务。",
+    ],
+    boundaries: [
+      "Early Access 提供基础自主能力，产品能力仍会随使用和迭代逐步扩展。",
+      "未知家务可通过 Scheduled Expert Mode 获得远程专家指导。",
+      "远程辅助、App 控制和 VR 遥操作需要明确权限与使用边界。",
+    ],
+    beaverQuestions: [
+      "用户如何区分自主执行、专家辅助和远程操作状态？",
+      "专家接入前，用户需要看到哪些提示并授予哪些权限？",
+      "人形机器人在家庭中如何兼顾通过性、续航、收纳和维护？",
+    ],
     beaverValue: "家庭交互、人工协助边界、隐私授权与消费者产品体验",
     priority: "重点对比",
     links: [
@@ -95,6 +191,47 @@ export const robots: CompetitorRecord[] = [
     positioning: "通用人形机器人；开展家庭任务泛化研究",
     stage: "家庭任务研究与企业场景验证；非普通家庭零售产品",
     keyFact: "Helix 2.5 在 30 个未见过的家庭中测试整理客厅、叠毛巾和铺床",
+    image: "https://images.ctfassets.net/qx5k8y1u9drj/6rREWE2DjWe7W3AFbZYSyH/21889f6a8f17464410b45c9ae12b718a/human-form-module-figure-3-image-v3.png?fm=webp&q=70&w=3840",
+    imageAlt: "Figure 03 全尺寸人形机器人",
+    metrics: [
+      { label: "身高", value: "5 ft 8 in" },
+      { label: "重量", value: "61 kg" },
+      { label: "负载", value: "20 kg" },
+      { label: "运行时间", value: "5 h" },
+      { label: "最高速度", value: "1.2 m/s" },
+      { label: "核心模型", value: "Helix" },
+    ],
+    taskFlows: [
+      { title: "家庭整理", context: "陌生家庭环境", steps: ["感知房间与物体", "规划整理顺序", "移动并操作物品", "完成客厅与卧室整理"], outcome: "测试跨家庭环境的任务泛化" },
+      { title: "衣物整理", context: "卧室 / 洗衣区", steps: ["识别衣物与床铺状态", "抓取并处理柔性物体", "完成叠毛巾或铺床"], outcome: "处理柔性物体与长程操作任务" },
+    ],
+    architecture: [
+      { title: "多视角视觉感知", detail: "头部相机与手掌相机提供环境和近距离视觉反馈。" },
+      { title: "触觉感知", detail: "指尖触觉传感器感知接触压力与抓取状态。" },
+      { title: "Helix 系列模型", detail: "将视觉、触觉与身体状态转化为连续动作控制。" },
+      { title: "全身协同执行", detail: "协调双足移动、身体平衡与双臂操作。" },
+    ],
+    designFeatures: [
+      { title: "掌心相机", detail: "在手部遮挡头部视角时，补充近距离视觉反馈。" },
+      { title: "指尖触觉传感器", detail: "可感知轻微接触压力，支持更精细的抓取控制。" },
+      { title: "柔性外覆与缓冲材料", detail: "在身体易接触区域采用软质织物和多密度泡棉。" },
+      { title: "无线感应充电", detail: "通过脚部充电线圈与充电底座实现自动补能。" },
+    ],
+    advantages: [
+      "将移动、平衡与双臂操作纳入统一的全身控制。",
+      "掌心视觉与指尖触觉增强遮挡环境下的精细操作。",
+      "围绕家庭环境改进软质外覆、声音交互和无线充电。",
+    ],
+    boundaries: [
+      "家庭任务泛化结果来自企业公开测试，仍需关注任务类型与测试条件。",
+      "家庭研究与消费级家庭交付是不同阶段，实际交付状态需单独判断。",
+      "复杂家庭任务的长期稳定性、维护与用户接管体验仍需观察。",
+    ],
+    beaverQuestions: [
+      "在家庭狭窄通道中，双足移动与轮式移动各自的任务优势是什么？",
+      "手部视觉和触觉如何提升透明、柔软、易碎物品的操作可靠性？",
+      "移动与操作连续发生时，如何定义整段任务的成功率？",
+    ],
     beaverValue: "陌生户型泛化、长任务规划、移动与操作协同",
     priority: "重点对比",
     links: [
@@ -112,6 +249,47 @@ export const robots: CompetitorRecord[] = [
     positioning: "围绕 Zero Labor Home 的家庭服务机器人",
     stage: "CES 2026 展示；规模销售与交付信息尚未明确",
     keyFact: "与 ThinQ 家电生态协同，展示厨房、洗衣与家务流程",
+    image: "https://www.lg.com/content/dam/channel/wcms/global/newsroom/news/home-appliance-solution/lg-electronics-presents-lg-cloid-home-robot-to-demonstrate-zero-labor-home-at-ces-2026/LG%20CLOiD%20Image%201.jpg",
+    imageAlt: "LG CLOiD 在洗衣区域整理衣物",
+    metrics: [
+      { label: "移动结构", value: "轮式底盘" },
+      { label: "操作结构", value: "双臂 + 五指手部" },
+      { label: "躯干", value: "可调节高度" },
+      { label: "家庭生态", value: "LG ThinQ" },
+      { label: "公开展示", value: "CES 2026" },
+    ],
+    taskFlows: [
+      { title: "厨房场景", context: "家庭厨房", steps: ["理解家庭用餐需求", "协同智能家电", "辅助完成厨房事务"], outcome: "连接机器人与厨房设备" },
+      { title: "洗衣场景", context: "洗衣房", steps: ["识别待处理衣物", "抓取并整理衣物", "协同洗衣设备完成流程"], outcome: "覆盖衣物管理任务" },
+      { title: "客厅照护", context: "家庭客厅", steps: ["感知家庭成员状态", "提供健康监测信息", "辅助日常照护"], outcome: "将家庭服务延伸至生活照护" },
+    ],
+    architecture: [
+      { title: "家庭需求", detail: "来自厨房、洗衣与客厅等真实家庭场景。" },
+      { title: "ThinQ 家庭生态", detail: "连接 LG 智能家电与 AI Home Platform。" },
+      { title: "CLOiD 任务执行", detail: "通过移动底盘、双臂和手部操作处理家务。" },
+      { title: "设备协同", detail: "机器人与家电共同完成家庭事务流程。" },
+    ],
+    designFeatures: [
+      { title: "轮式移动底盘", detail: "在家庭平面空间中移动并接近家电与家具。" },
+      { title: "双臂操作", detail: "支持全臂动作与手指级操作。" },
+      { title: "可调节躯干", detail: "调整操作高度以适应不同家庭设备。" },
+      { title: "家电生态连接", detail: "与 LG ThinQ 家庭设备和服务协同。" },
+    ],
+    advantages: [
+      "将机器人能力与家庭设备生态结合，而非孤立执行任务。",
+      "围绕厨房、洗衣和客厅照护展示完整家庭场景。",
+      "轮式底盘与可调节躯干适配平面家庭空间中的多高度操作。",
+    ],
+    boundaries: [
+      "目前以 CES 场景展示为主，规模销售与家庭交付信息尚未明确。",
+      "任务能力与 ThinQ 家电生态的具体兼容范围仍需进一步观察。",
+      "楼梯、门槛和多层住宅的移动适应能力尚未明确。",
+    ],
+    beaverQuestions: [
+      "机器人与智能家电之间，哪些任务应该由机器人执行，哪些由家电完成？",
+      "家庭设备协议不统一时，如何保证任务编排的连续性？",
+      "轮式底盘在不同房间地面、门槛和狭窄区域中的通过性如何设计？",
+    ],
     beaverValue: "家庭设备生态、任务编排、家庭成员与宠物安全",
     priority: "重点对比",
     links: [
@@ -180,6 +358,9 @@ export const robots: CompetitorRecord[] = [
     positioning: "商业服务、展厅接待与交互任务",
     stage: "官方披露多场景商业部署；具体任务边界需按场景核验",
     keyFact: "约 1.69 m、约 69 kg；支持多模态交互与自主导航",
+    image: "https://store.agibot.com/cdn/shop/files/1_d5122551-3eb0-4784-8c7e-01963aeb46ca.png?v=1766128167&width=1600",
+    imageAlt: "智元 AGIBOT A2 Ultra 全尺寸人形机器人",
+
     beaverValue: "商业服务任务、人体尺度与人机互动",
     links: [
       { label: "A2 Ultra 官方产品页", url: "https://www.agibot.com/products/A2_Ultra" },
